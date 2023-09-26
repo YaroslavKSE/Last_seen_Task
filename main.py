@@ -1,16 +1,34 @@
-# This is a sample Python script.
+import requests
+import json
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+# API endpoint URL
+url = "https://sef.podkolzin.consulting/api/users/lastSeen"
+
+# Parameters
+params = {'offset': 0}
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+def show_20_users(offset):
+    # Sending GET request and saving the response as a response object
+    response = requests.get(url, params=offset, headers={'accept': 'application/json'})
+
+    # Checking if the request was successful
+    if response.status_code == 200:
+        # Parse JSON response
+        json_data = json.loads(response.text)
+
+        # Extracting the list of users from JSON data
+        user_list = json_data['data']
+
+        # Loop through each user in the list
+        for user in user_list:
+            print("----------")
+            if user['isOnline']:
+                print(f"{user['nickname']} is online")
+            else:
+                print(f"{user['nickname']} is offline")
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+while params['offset'] < 217:
+    show_20_users(params)
+    params['offset'] += 20
