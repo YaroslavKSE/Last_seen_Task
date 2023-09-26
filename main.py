@@ -1,71 +1,41 @@
-import requests
-import json
-from datetime import datetime, timezone
-from dateutil.parser import parse
-
-# API endpoint URL
-url = "https://sef.podkolzin.consulting/api/users/lastSeen"
-
-# Parameters
-params = {'offset': 0}
+import unittest
+from unittest.mock import patch, Mock
+from models import get_20_users
 
 
-def show_20_users(offset):
-    # Sending GET request and saving the response as a response object
-    response = requests.get(url, params=offset, headers={'accept': 'application/json'})
+class TestGet20Users(unittest.TestCase):
 
-    # Checking if the request was successful
-    if response.status_code == 200:
-        # Parse JSON response
-        json_data = json.loads(response.text)
+    @patch('requests.get')
+    def test_successful_response(self, mock_get):
+        # Mocking a successful response
+        mock_response = Mock()
+        mock_response.status_code = 200
+        mock_data = {
+            "total": 217,
+            "data": [{"nickname": "Alice", "isOnline": True, "lastSeenDate": None},
+                     {"nickname": "Bob", "isOnline": False, "lastSeenDate": "2023-09-25T10:30:00+00:00"}]
+        }
+        mock_response.json.return_value = mock_data
+        mock_get.return_value = mock_response
 
-        # Extracting the list of users from JSON data
-        user_list = json_data['data']
+        # Calling the function
+        result = get_20_users({'offset': 0})
 
-        # Loop through each user in the list
-        for user in user_list:
-            print("----------")
-            if user['isOnline']:
-                print(f"{user['nickname']} is online")
-            else:
-                last_seen_str = user['lastSeenDate']
-                # Convert lastSeenDate string to a datetime object, considering time zone
-                last_seen_datetime = parse(last_seen_str)
+        # Asserting the result
+        self.assertEqual(len(result), 2)
+        self.assertEqual(result[0]['nickname'], "Alice")
 
-                # Get the current datetime in UTC
-                current_datetime = datetime.now(timezone.utc)
+    @patch('requests.get')
+    def test_failed_response(self, mock_get):
+        # Mocking a failed response
+        mock_response = Mock()
+        mock_response.status_code = 400
+        mock_get.return_value = mock_response
 
-                # Calculate the time delta between now and the last seen date
-                time_delta = current_datetime - last_seen_datetime
+        # Calling the function
+        result = get_20_users({'offset': 0})
 
-                # Extract the number of seconds from the time delta
-                seconds = time_delta.total_seconds()
-                if 0 <= seconds <= 30:
-                    print(f"{user['nickname']} seen just now")
-                    continue
-                if 31 <= seconds <= 60:
-                    print(f"{user['nickname']} seen less than minute ago")
-                    continue
-                if 61 <= seconds <= 3540:
-                    print(f"{user['nickname']} seen a couple of minutes ago")
-                    continue
-                if 3541 <= seconds <= 7140:
-                    print(f"{user['nickname']} seen an hour ago")
-                    continue
-                if last_seen_datetime.day == current_datetime.day and seconds > 7141:
-                    print(f"{user['nickname']} seen today")
-                    continue
-                if last_seen_datetime.day == current_datetime.day - 1 and seconds > 7141:
-                    print(f"{user['nickname']} seen yesterday")
-                    continue
-                if 1 < last_seen_datetime.day - current_datetime.day <= 7 and seconds > 7141:
-                    print(f"{user['nickname']} seen this week")
-                    continue
-                print(f"{user['nickname']} seen long time ago")
-    else:
-        print(f"Failed to retrieve data. Status code: {response.status_code}")
+        # Asserting the result
+        self.assertEqual(result, [])
 
 
-while params['offset'] < 217:
-    show_20_users(params)
-    params['offset'] += 20
