@@ -15,7 +15,8 @@ class TestGet20Users(unittest.TestCase):
             "total": 217,
             "data": [{"nickname": "Alice", "isOnline": True, "lastSeenDate": None},
                      {"nickname": "Bob", "isOnline": False, "lastSeenDate": "2023-09-25T10:30:00+00:00"},
-                     {"nickname": "Snack", "isOnline": False, "lastSeenDate": "2023-09-24T10:30:00+00:00"}]
+                     {"nickname": "Snack", "isOnline": False, "lastSeenDate": "2023-09-24T10:30:00+00:00"},
+                     {"nickname": "Nick", "isOnline": False, "lastSeenDate": "2023-09-26T12:00:00+00:00"}]
         }
         mock_response.json.return_value = mock_data
         mock_response.text = json.dumps(mock_data)  # mock the .text attribute
@@ -25,8 +26,11 @@ class TestGet20Users(unittest.TestCase):
         result = get_20_users({'offset': 0})
 
         # Asserting the result
-        self.assertEqual(len(result), 3)
+        self.assertEqual(len(result), 4)
         self.assertEqual(result[0]['nickname'], "Alice")
+        self.assertEqual(result[1]['nickname'], "Bob")
+        self.assertEqual(result[2]['nickname'], "Snack")
+        self.assertEqual(result[3]['nickname'], "Nick")
 
     @patch('requests.get')
     def test_failed_response(self, mock_get):
