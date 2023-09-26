@@ -62,10 +62,11 @@ def print_20_users(list_of_users):
             if last_seen_datetime.day == current_datetime.day - 1 and seconds > 7141:
                 print(f"{user['nickname']} seen yesterday")
                 continue
-            if 1 < last_seen_datetime.day - current_datetime.day <= 7 and seconds > 7141:
+            if 1 < current_datetime.day - last_seen_datetime.day <= 7 and seconds > 7141:
                 print(f"{user['nickname']} seen this week")
                 continue
-            print(f"{user['nickname']} seen long time ago")
+            else:
+                print(f"{user['nickname']} seen long time ago")
 
 
 while params['offset'] < 217:

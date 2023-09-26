@@ -1,4 +1,5 @@
 import unittest
+import json
 from unittest.mock import patch, Mock
 from models import get_20_users
 
@@ -13,16 +14,18 @@ class TestGet20Users(unittest.TestCase):
         mock_data = {
             "total": 217,
             "data": [{"nickname": "Alice", "isOnline": True, "lastSeenDate": None},
-                     {"nickname": "Bob", "isOnline": False, "lastSeenDate": "2023-09-25T10:30:00+00:00"}]
+                     {"nickname": "Bob", "isOnline": False, "lastSeenDate": "2023-09-25T10:30:00+00:00"},
+                     {"nickname": "Snack", "isOnline": False, "lastSeenDate": "2023-09-24T10:30:00+00:00"}]
         }
         mock_response.json.return_value = mock_data
+        mock_response.text = json.dumps(mock_data)  # mock the .text attribute
         mock_get.return_value = mock_response
 
         # Calling the function
         result = get_20_users({'offset': 0})
 
         # Asserting the result
-        self.assertEqual(len(result), 2)
+        self.assertEqual(len(result), 3)
         self.assertEqual(result[0]['nickname'], "Alice")
 
     @patch('requests.get')
@@ -37,5 +40,3 @@ class TestGet20Users(unittest.TestCase):
 
         # Asserting the result
         self.assertEqual(result, [])
-
-

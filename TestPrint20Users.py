@@ -30,4 +30,12 @@ class TestPrint20Users(unittest.TestCase):
         expected_output = "----------\nBob seen yesterday\n"
         self.assertEqual(output, expected_output)
 
+    def test_print_seen_this_week_user(self):
+        user_data = [{"nickname": "Smack", "isOnline": False, "lastSeenDate": "2023-09-24T10:30:00+00:00"}]
+        print_20_users(user_data)
+        self.held_output.seek(0)
+        output = self.held_output.read()
+        expected_output = "----------\nSmack seen this week\n"
+        self.assertEqual(output, expected_output)
+
     # Add similar tests for other last seen times (just now, a few minutes ago, etc.)
