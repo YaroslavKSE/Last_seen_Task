@@ -1,6 +1,7 @@
 from io import StringIO
 import sys
 import unittest
+from datetime import datetime, timezone
 from models import print_20_users
 
 
@@ -23,7 +24,9 @@ class TestPrint20Users(unittest.TestCase):
         self.assertEqual(output, expected_output)
 
     def test_print_seen_user_yesterday(self):
-        user_data = [{"nickname": "Bob", "isOnline": False, "lastSeenDate": "2023-09-25T10:30:00+00:00"}]
+        current_datetime = datetime.now(timezone.utc)
+        user_data = [{"nickname": "Bob", "isOnline": False,
+                      "lastSeenDate": f"2023-09-{current_datetime.day - 1}T10:30:00+00:00"}]
         print_20_users(user_data)
         self.held_output.seek(0)
         output = self.held_output.read()
@@ -31,7 +34,9 @@ class TestPrint20Users(unittest.TestCase):
         self.assertEqual(output, expected_output)
 
     def test_print_seen_user_this_week(self):
-        user_data = [{"nickname": "Smack", "isOnline": False, "lastSeenDate": "2023-09-24T10:30:00+00:00"}]
+        current_datetime = datetime.now(timezone.utc)
+        user_data = [{"nickname": "Smack", "isOnline": False,
+                      "lastSeenDate": f"2023-09-{current_datetime.day - 4}T10:30:00+00:00"}]
         print_20_users(user_data)
         self.held_output.seek(0)
         output = self.held_output.read()
@@ -39,7 +44,9 @@ class TestPrint20Users(unittest.TestCase):
         self.assertEqual(output, expected_output)
 
     def test_print_seen_user_a_couple_of_minutes_ago(self):
-        user_data = [{"nickname": "Nick", "isOnline": False, "lastSeenDate": "2023-09-26T12:00:00+00:00"}]
+        current_datetime = datetime.now(timezone.utc)
+        user_data = [{"nickname": "Nick", "isOnline": False,
+                      "lastSeenDate": f"2023-09-{current_datetime.day}T{current_datetime.hour}:{current_datetime.minute - 1}:00+00:00"}]
         print_20_users(user_data)
         self.held_output.seek(0)
         output = self.held_output.read()
@@ -47,7 +54,9 @@ class TestPrint20Users(unittest.TestCase):
         self.assertEqual(output, expected_output)
 
     def test_print_seen_user_an_hour_ago(self):
-        user_data = [{"nickname": "Kim", "isOnline": False, "lastSeenDate": "2023-09-26T11:00:00+00:00"}]
+        current_datetime = datetime.now(timezone.utc)
+        user_data = [{"nickname": "Kim", "isOnline": False,
+                      "lastSeenDate": f"2023-09-{current_datetime.day}T{current_datetime.hour - 1}:30:00+00:00"}]
         print_20_users(user_data)
         self.held_output.seek(0)
         output = self.held_output.read()
@@ -55,7 +64,9 @@ class TestPrint20Users(unittest.TestCase):
         self.assertEqual(output, expected_output)
 
     def test_print_seen_user_less_than_a_minute_ago(self):
-        user_data = [{"nickname": "John", "isOnline": False, "lastSeenDate": "2023-09-26T12:15:00+00:00"}]
+        current_datetime = datetime.now(timezone.utc)
+        user_data = [{"nickname": "John", "isOnline": False,
+                      "lastSeenDate": f"2023-09-{current_datetime.day}T{current_datetime.hour}:{current_datetime.minute}:{current_datetime.second - 35}+00:00"}]
         print_20_users(user_data)
         self.held_output.seek(0)
         output = self.held_output.read()
@@ -63,7 +74,9 @@ class TestPrint20Users(unittest.TestCase):
         self.assertEqual(output, expected_output)
 
     def test_print_seen_user_just_now(self):
-        user_data = [{"nickname": "Mack", "isOnline": False, "lastSeenDate": "2023-09-26T12:16:00+00:00"}]
+        current_datetime = datetime.now(timezone.utc)
+        user_data = [{"nickname": "Mack", "isOnline": False,
+                      "lastSeenDate": f"2023-09-{current_datetime.day}T{current_datetime.hour}:{current_datetime.minute}:{current_datetime.second - 10}+00:00"}]
         print_20_users(user_data)
         self.held_output.seek(0)
         output = self.held_output.read()
@@ -79,7 +92,9 @@ class TestPrint20Users(unittest.TestCase):
         self.assertEqual(output, expected_output)
 
     def test_print_seen_user_today(self):
-        user_data = [{"nickname": "Ben", "isOnline": False, "lastSeenDate": "2023-09-26T01:00+00:00"}]
+        current_datetime = datetime.now(timezone.utc)
+        user_data = [{"nickname": "Ben", "isOnline": False,
+                      "lastSeenDate": f"2023-09-{current_datetime.day}T{current_datetime.hour - 5}:00:00+00:00"}]
         print_20_users(user_data)
         self.held_output.seek(0)
         output = self.held_output.read()

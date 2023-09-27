@@ -48,7 +48,7 @@ def print_20_users(list_of_users):
                 print(f"{user['nickname']} seen just now")
                 continue
             if 31 <= seconds <= 60:
-                print(f"{user['nickname']} seen less than minute ago")
+                print(f"{user['nickname']} seen less than a minute ago")
                 continue
             if 61 <= seconds <= 3540:
                 print(f"{user['nickname']} seen a couple of minutes ago")
