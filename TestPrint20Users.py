@@ -46,7 +46,8 @@ class TestPrint20Users(unittest.TestCase):
     def test_print_seen_user_a_couple_of_minutes_ago(self):
         current_datetime = datetime.now(timezone.utc)
         user_data = [{"nickname": "Nick", "isOnline": False,
-                      "lastSeenDate": f"2023-09-{current_datetime.day}T{current_datetime.hour}:{current_datetime.minute - 1}:00+00:00"}]
+                      "lastSeenDate": f"2023-09-{current_datetime.day}T{current_datetime.hour}"
+                                      f":{current_datetime.minute - 1}:00+00:00"}]
         print_20_users(user_data)
         self.held_output.seek(0)
         output = self.held_output.read()
@@ -56,7 +57,8 @@ class TestPrint20Users(unittest.TestCase):
     def test_print_seen_user_an_hour_ago(self):
         current_datetime = datetime.now(timezone.utc)
         user_data = [{"nickname": "Kim", "isOnline": False,
-                      "lastSeenDate": f"2023-09-{current_datetime.day}T{current_datetime.hour - 1}:30:00+00:00"}]
+                      "lastSeenDate": f"2023-09-{current_datetime.day}T{current_datetime.hour - 1}:"
+                                      f"{current_datetime.minute}:00+00:00"}]
         print_20_users(user_data)
         self.held_output.seek(0)
         output = self.held_output.read()
@@ -66,7 +68,8 @@ class TestPrint20Users(unittest.TestCase):
     def test_print_seen_user_less_than_a_minute_ago(self):
         current_datetime = datetime.now(timezone.utc)
         user_data = [{"nickname": "John", "isOnline": False,
-                      "lastSeenDate": f"2023-09-{current_datetime.day}T{current_datetime.hour}:{current_datetime.minute}:{current_datetime.second - 35}+00:00"}]
+                      "lastSeenDate": f"2023-09-{current_datetime.day}T{current_datetime.hour}"
+                                      f":{current_datetime.minute}:{current_datetime.second - 31}+00:00"}]
         print_20_users(user_data)
         self.held_output.seek(0)
         output = self.held_output.read()
@@ -76,7 +79,8 @@ class TestPrint20Users(unittest.TestCase):
     def test_print_seen_user_just_now(self):
         current_datetime = datetime.now(timezone.utc)
         user_data = [{"nickname": "Mack", "isOnline": False,
-                      "lastSeenDate": f"2023-09-{current_datetime.day}T{current_datetime.hour}:{current_datetime.minute}:{current_datetime.second - 10}+00:00"}]
+                      "lastSeenDate": f"2023-09-{current_datetime.day}T{current_datetime.hour}"
+                                      f":{current_datetime.minute}:{current_datetime.second - 2}+00:00"}]
         print_20_users(user_data)
         self.held_output.seek(0)
         output = self.held_output.read()
