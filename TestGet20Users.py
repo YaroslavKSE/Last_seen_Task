@@ -1,7 +1,7 @@
 import unittest
 import json
 from unittest.mock import patch, Mock
-from models import get_20_users
+from models import get_users_data
 
 
 class TestGet20Users(unittest.TestCase):
@@ -23,7 +23,7 @@ class TestGet20Users(unittest.TestCase):
         mock_get.return_value = mock_response
 
         # Calling the function
-        result = get_20_users({'offset': 0})
+        result = get_users_data({'offset': 0})
 
         # Asserting the result
         self.assertEqual(len(result), 4)
@@ -40,7 +40,7 @@ class TestGet20Users(unittest.TestCase):
         mock_get.return_value = mock_response
 
         # Calling the function
-        result = get_20_users({'offset': 0})
+        result = get_users_data({'offset': 0})
 
         # Asserting the result
         self.assertEqual(result, [])

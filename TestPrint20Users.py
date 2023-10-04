@@ -36,7 +36,7 @@ class TestPrint20Users(unittest.TestCase):
     def test_print_seen_user_this_week(self):
         current_datetime = datetime.now(timezone.utc)
         user_data = [{"nickname": "Smack", "isOnline": False,
-                      "lastSeenDate": f"2023-09-{current_datetime.day - 4}T10:30:00+00:00"}]
+                      "lastSeenDate": f"2023-09-{current_datetime.day - 3}T10:30:00+00:00"}]
         print_20_users(user_data)
         self.held_output.seek(0)
         output = self.held_output.read()

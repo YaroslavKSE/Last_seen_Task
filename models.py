@@ -9,7 +9,7 @@ url = "https://sef.podkolzin.consulting/api/users/lastSeen"
 params = {'offset': 0}
 
 
-def get_20_users(offset):
+def get_users_data(offset):
     # Sending GET request and saving the response as a response object
     response = requests.get(url, params=offset, headers={'accept': 'application/json'})
     if response.status_code != 200:
@@ -70,5 +70,5 @@ def print_20_users(list_of_users):
 
 
 while params['offset'] < 217:
-    print_20_users(get_20_users(params))
+    print_20_users(get_users_data(params))
     params['offset'] += 20
