@@ -8,8 +8,14 @@ url = "https://sef.podkolzin.consulting/api/users/lastSeen"
 
 params = {'offset': 0}
 
+total_records = 1
+
+offset_increase = 1
+
 
 def get_users_data(offset):
+    global total_records
+    global offset_increase
     # Sending GET request and saving the response as a response object
     response = requests.get(url, params=offset, headers={'accept': 'application/json'})
     if response.status_code != 200:
@@ -19,14 +25,16 @@ def get_users_data(offset):
     # Parse JSON response
     json_data = json.loads(response.text)
 
-    # Extracting the list of users from JSON data
+    # Extracting server info and the list of users from JSON data
     user_list = json_data['data']
+    total_records = json_data['total']
+    offset_increase = len(user_list)
 
     # Loop through each user in the list
     return user_list
 
 
-def print_20_users(list_of_users):
+def print_current_user_status(list_of_users):
     for user in list_of_users:
         print("----------")
         if user['isOnline']:
@@ -69,6 +77,6 @@ def print_20_users(list_of_users):
                 print(f"{user['nickname']} seen long time ago")
 
 
-while params['offset'] < 217:
-    print_20_users(get_users_data(params))
-    params['offset'] += 20
+while params['offset'] < total_records:
+    print_current_user_status(get_users_data(params))
+    params['offset'] += offset_increase
